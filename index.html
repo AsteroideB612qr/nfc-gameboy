@@ -28,21 +28,17 @@
     <div id="game"></div>
 
     <script>
-        window.EJS_player = "#game";
+        EJS_player = "#game";
+        EJS_core = "gb";
+        EJS_gameUrl = "";
+        EJS_gameName = "NFC Game Boy";
+        EJS_startOnLoaded = false;
 
-        window.EJS_core = "gb";
-
-        window.EJS_gameUrl = "";
-
-        window.EJS_gameName = "NFC Game Boy";
-
-        window.EJS_startOnLoaded = true;
-
-        window.EJS_pathtodata =
-            "https://cdn.emulatorjs.org/4.2.3/data/";
+        EJS_pathtodata =
+            "https://cdn.emulatorjs.org/stable/data/";
     </script>
 
-    <script src="https://cdn.emulatorjs.org/4.2.3/data/loader.js"></script>
+    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 
 </body>
 </html>

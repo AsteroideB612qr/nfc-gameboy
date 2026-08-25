@@ -28,7 +28,6 @@
         }
 
         #game {
-
             width: 100%;
             height: 100%;
         }
@@ -39,11 +38,12 @@
 
             left: 5px;
             right: 5px;
+
             bottom: 5px;
 
             z-index: 999999;
 
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0,0,0,.90);
 
             color: #00ff66;
 
@@ -56,6 +56,7 @@
             max-height: 35vh;
 
             overflow: auto;
+
         }
 
     </style>
@@ -70,9 +71,7 @@
 
 
 <div id="diagnostico">
-
     Preparando...
-
 </div>
 
 
@@ -95,7 +94,7 @@ function log(texto) {
 
 
 // ==========================================
-// CONFIGURACIÓN EMULATORJS
+// CONFIGURACIÓN
 // ==========================================
 
 window.EJS_player =
@@ -118,7 +117,7 @@ window.EJS_startOnLoaded =
 
 
 // ==========================================
-// CUANDO EMULATORJS ESTÉ LISTO
+// EJS READY
 // ==========================================
 
 window.EJS_ready = function () {
@@ -133,15 +132,10 @@ window.EJS_ready = function () {
 
 
 // ==========================================
-// BUSCAR BOTÓN REINICIAR
+// BUSCAR REINICIAR
 // ==========================================
 
 function buscarReiniciar() {
-
-    log(
-        "Esperando a que aparezca Reiniciar..."
-    );
-
 
     setTimeout(function () {
 
@@ -151,7 +145,7 @@ function buscarReiniciar() {
             );
 
 
-        let botonReiniciar =
+        let boton =
             null;
 
 
@@ -161,13 +155,9 @@ function buscarReiniciar() {
             i++
         ) {
 
-            const boton =
-                botones[i];
-
-
             const texto =
                 (
-                    boton.innerText ||
+                    botones[i].innerText ||
                     ""
                 ).trim();
 
@@ -176,8 +166,8 @@ function buscarReiniciar() {
                 texto === "Reiniciar"
             ) {
 
-                botonReiniciar =
-                    boton;
+                boton =
+                    botones[i];
 
                 break;
 
@@ -186,15 +176,11 @@ function buscarReiniciar() {
         }
 
 
-        if (!botonReiniciar) {
+        if (!boton) {
 
             log(
-                "❌ No encontré Reiniciar"
+                "Esperando botón Reiniciar..."
             );
-
-            // Volvemos a intentar
-            // porque el menú puede
-            // tardar en construirse.
 
             setTimeout(
                 buscarReiniciar,
@@ -202,37 +188,178 @@ function buscarReiniciar() {
             );
 
             return;
+
         }
 
 
         log(
-            "✓ Encontré Reiniciar"
+            "✓ Botón Reiniciar encontrado"
         );
 
 
-        // ==================================
-        // EJECUTAR REINICIAR
-        // ==================================
+        simularToque(
+            boton
+        );
+
+    }, 2000);
+
+}
+
+
+// ==========================================
+// SIMULAR INTERACCIÓN
+// ==========================================
+
+function simularToque(
+    elemento
+) {
+
+    log(
+        "Enviando eventos táctiles..."
+    );
+
+
+    try {
+
+        // ----------------------------------
+        // POINTER DOWN
+        // ----------------------------------
+
+        elemento.dispatchEvent(
+
+            new PointerEvent(
+                "pointerdown",
+                {
+                    bubbles: true,
+                    cancelable: true,
+                    pointerId: 1,
+                    pointerType: "touch",
+                    isPrimary: true,
+                    buttons: 1
+                }
+            )
+
+        );
+
+
+        // ----------------------------------
+        // TOUCH START
+        // ----------------------------------
+
+        try {
+
+            elemento.dispatchEvent(
+
+                new TouchEvent(
+                    "touchstart",
+                    {
+                        bubbles: true,
+                        cancelable: true
+                    }
+                )
+
+            );
+
+        }
+
+        catch (e) {
+
+            log(
+                "TouchEvent no disponible"
+            );
+
+        }
+
+
+        // ----------------------------------
+        // PEQUEÑA PAUSA
+        // ----------------------------------
+
+        setTimeout(
+            function () {
+
+
+                // --------------------------
+                // POINTER UP
+                // --------------------------
+
+                elemento.dispatchEvent(
+
+                    new PointerEvent(
+                        "pointerup",
+                        {
+                            bubbles: true,
+                            cancelable: true,
+                            pointerId: 1,
+                            pointerType: "touch",
+                            isPrimary: true,
+                            buttons: 0
+                        }
+                    )
+
+                );
+
+
+                // --------------------------
+                // TOUCH END
+                // --------------------------
+
+                try {
+
+                    elemento.dispatchEvent(
+
+                        new TouchEvent(
+                            "touchend",
+                            {
+                                bubbles: true,
+                                cancelable: true
+                            }
+                        )
+
+                    );
+
+                }
+
+                catch (e) {
+
+                    log(
+                        "TouchEnd no disponible"
+                    );
+
+                }
+
+
+                // --------------------------
+                // CLICK
+                // --------------------------
+
+                elemento.click();
+
+
+                log(
+                    "✓ Secuencia enviada"
+                );
+
+
+                log(
+                    "¿Arrancó el juego?"
+                );
+
+
+            },
+            150
+        );
+
+    }
+
+    catch (error) {
 
         log(
-            "Ejecutando Reiniciar..."
+            "❌ Error: " +
+            error
         );
 
-
-        botonReiniciar.click();
-
-
-        log(
-            "✓ Reiniciar ejecutado"
-        );
-
-
-        log(
-            "🎮 El juego debería iniciar"
-        );
-
-
-    }, 1500);
+    }
 
 }
 

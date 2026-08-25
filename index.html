@@ -16,23 +16,42 @@
 
         html,
         body {
-
             margin: 0;
             padding: 0;
-
             width: 100%;
             height: 100%;
-
             background: #111;
-
             overflow: hidden;
-
         }
 
         #game {
-
             width: 100%;
             height: 100%;
+        }
+
+        #diagnostico {
+
+            position: fixed;
+
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+
+            z-index: 999999;
+
+            background: rgba(0,0,0,.90);
+
+            color: #00ff66;
+
+            padding: 10px;
+
+            font-family: monospace;
+
+            font-size: 11px;
+
+            max-height: 35vh;
+
+            overflow: auto;
 
         }
 
@@ -45,137 +64,114 @@
 
 <div id="game"></div>
 
+<div id="diagnostico">
+    Iniciando...
+</div>
+
 
 <script>
 
-    // ==========================================
-    // EMULATORJS
-    // ==========================================
-
-    window.EJS_player = "#game";
-
-    window.EJS_core = "gb";
-
-    window.EJS_gameUrl = "games/Pokemon_Red.gb";
-
-    window.EJS_gameName = "NFC Game Boy";
-
-    window.EJS_pathtodata =
-        "https://cdn.emulatorjs.org/stable/data/";
-
-    window.EJS_startOnLoaded = true;
+const D =
+    document.getElementById("diagnostico");
 
 
-    // ==========================================
-    // CUANDO EL EMULADOR ESTÉ LISTO
-    // ==========================================
+function log(texto) {
 
-    window.EJS_ready = function () {
+    D.innerHTML +=
+        "<br>" + texto;
 
-        console.log("EJS listo");
+    console.log(texto);
 
-        esperarEmulador();
-
-    };
+}
 
 
-    // ==========================================
-    // ESPERAR HASTA QUE EXISTAN LOS OBJETOS
-    // ==========================================
+// ==========================================
+// EMULATORJS
+// ==========================================
 
-    function esperarEmulador() {
+window.EJS_player = "#game";
 
-        if (
-            window.EJS_emulator &&
-            window.EJS_emulator.gameManager
-        ) {
+window.EJS_core = "gb";
 
-            console.log(
-                "Emulador encontrado"
-            );
+window.EJS_gameUrl = "games/test.gb";
 
-            despertarJuego();
+window.EJS_gameName =
+    "NFC Game Boy";
 
-        } else {
+window.EJS_pathtodata =
+    "https://cdn.emulatorjs.org/stable/data/";
 
-            console.log(
-                "Esperando emulador..."
-            );
-
-            setTimeout(
-                esperarEmulador,
-                250
-            );
-
-        }
-
-    }
+window.EJS_startOnLoaded = true;
 
 
-    // ==========================================
-    // PAUSA → REANUDAR
-    // ==========================================
+// ==========================================
+// CUANDO EJS ESTÉ LISTO
+// ==========================================
 
-    function despertarJuego() {
+window.EJS_ready = function () {
 
-        console.log(
-            "Intentando Pausa → Reanudar"
+    log("EJS READY");
+
+    buscarMenu();
+
+};
+
+
+// ==========================================
+// BUSCAR ELEMENTOS DEL MENÚ
+// ==========================================
+
+function buscarMenu() {
+
+    log("Buscando elementos...");
+
+
+    setTimeout(function () {
+
+        const elementos =
+            document.querySelectorAll("*");
+
+
+        let encontrados = 0;
+
+
+        elementos.forEach(function (elemento) {
+
+            const texto =
+                (elemento.innerText || "")
+                .trim();
+
+
+            if (
+                texto === "Pausa" ||
+                texto === "Reanudar" ||
+                texto === "II Pausa" ||
+                texto.includes("Pausa")
+            ) {
+
+                encontrados++;
+
+                log(
+                    "ENCONTRADO: " +
+                    elemento.tagName +
+                    " / " +
+                    texto
+                );
+
+            }
+
+        });
+
+
+        log(
+            "Total encontrados: " +
+            encontrados
         );
 
 
-        try {
+    }, 2000);
 
-            // Primero pausamos
-
-            window.EJS_emulator.pause();
-
-
-            console.log(
-                "Pausa ejecutada"
-            );
-
-
-            // Pequeña espera
-
-            setTimeout(function () {
-
-                console.log(
-                    "Ejecutando Reanudar"
-                );
-
-
-                /*
-                 * Intentamos usar play()
-                 */
-
-                if (
-                    typeof
-                    window.EJS_emulator.play ===
-                    "function"
-                ) {
-
-                    window.EJS_emulator.play();
-
-                    console.log(
-                        "PLAY ejecutado"
-                    );
-
-                }
-
-            }, 300);
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Error:",
-                error
-            );
-
-        }
-
-    }
+}
 
 </script>
 

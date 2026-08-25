@@ -2,7 +2,6 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -13,38 +12,26 @@
     <title>NFC Game Boy</title>
 
     <style>
-
         html,
         body {
-
             margin: 0;
             padding: 0;
-
             width: 100%;
             height: 100%;
-
             background: #111;
-
             overflow: hidden;
-
         }
 
         #game {
-
             width: 100%;
             height: 100%;
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
     <div id="game"></div>
-
 
     <script>
 
@@ -63,26 +50,21 @@
         // Nombre
         window.EJS_gameName = "NFC Game Boy";
 
-        // CDN
+        // Datos del emulador
         window.EJS_pathtodata =
             "https://cdn.emulatorjs.org/stable/data/";
 
         // Arranque automático
         window.EJS_startOnLoaded = true;
 
-        // Carga suave
-        window.EJS_softLoad = true;
-
-        // No mostrar anuncio
-        window.EJS_AdUrl = "";
+        // MODO DEBUG
+        window.EJS_DEBUG_XX = true;
 
     </script>
-
 
     <script
         src="https://cdn.emulatorjs.org/stable/data/loader.js">
     </script>
-
 
 </body>
 

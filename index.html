@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>NFC Game Boy</title>
 
@@ -26,33 +29,49 @@
 
 <body>
 
-<div id="game"></div>
+    <div id="game"></div>
 
-<script>
+    <script>
 
-    // ==========================================
-    // CONFIGURACIÓN EMULATORJS
-    // ==========================================
+        // ==========================================
+        // EMULATORJS
+        // ==========================================
 
-    EJS_player = "#game";
+        window.EJS_player = "#game";
 
-    EJS_core = "gb";
+        // Game Boy
+        window.EJS_core = "gb";
 
-    EJS_gameUrl = "games/Pokemon_Red.gb";
+        // ROM
+        window.EJS_gameUrl = "games/Pokemon_Red.gb";
 
-    EJS_gameName = "NFC Game Boy";
+        // Nombre del juego
+        window.EJS_gameName = "NFC Game Boy";
 
-    EJS_pathtodata =
-        "https://cdn.emulatorjs.org/stable/data/";
+        // Datos del emulador
+        window.EJS_pathtodata =
+            "https://cdn.emulatorjs.org/stable/data/";
 
-    // Inicio automático
-    EJS_startOnLoaded = true;
+        // Arranque automático
+        window.EJS_startOnLoaded = true;
 
-</script>
 
-<script
-    src="https://cdn.emulatorjs.org/stable/data/loader.js">
-</script>
+        // ==========================================
+        // CUANDO EMULATORJS ESTÉ LISTO
+        // ==========================================
+
+        window.EJS_ready = function () {
+
+            console.log("EmulatorJS está listo.");
+
+        };
+
+    </script>
+
+
+    <script
+        src="https://cdn.emulatorjs.org/stable/data/loader.js">
+    </script>
 
 </body>
 </html>

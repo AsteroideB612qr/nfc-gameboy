@@ -36,32 +36,6 @@
 
         }
 
-        #diagnostico {
-
-            position: fixed;
-
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-
-            z-index: 999999;
-
-            background: rgba(0,0,0,.92);
-
-            color: #00ff66;
-
-            padding: 10px;
-
-            font-family: monospace;
-
-            font-size: 11px;
-
-            max-height: 40vh;
-
-            overflow: auto;
-
-        }
-
     </style>
 
 </head>
@@ -73,244 +47,31 @@
 <div id="game"></div>
 
 
-<div id="diagnostico">
-    Iniciando...
-</div>
-
-
 <script>
 
-const D =
-    document.getElementById(
-        "diagnostico"
-    );
+    // ==========================================
+    // EMULATORJS
+    // ==========================================
 
+    window.EJS_player = "#game";
 
-function log(texto) {
+    window.EJS_core = "gb";
 
-    D.innerHTML +=
-        "<br>" + texto;
+    window.EJS_gameUrl = "games/Pokemon_Red.gb";
 
-    console.log(texto);
+    window.EJS_gameName = "NFC Game Boy";
 
-}
+    window.EJS_pathtodata =
+        "https://cdn.emulatorjs.org/stable/data/";
 
+    // Arrancar automáticamente
+    window.EJS_startOnLoaded = true;
 
-// ==========================================
-// CONFIGURACIÓN EMULATORJS
-// ==========================================
+    // ==========================================
+    // PRUEBA: SIN AUDIO
+    // ==========================================
 
-window.EJS_player =
-    "#game";
-
-window.EJS_core =
-    "gb";
-
-window.EJS_gameUrl =
-    "games/Pokemon_Red.gb";
-
-window.EJS_gameName =
-    "NFC Game Boy";
-
-window.EJS_pathtodata =
-    "https://cdn.emulatorjs.org/stable/data/";
-
-window.EJS_startOnLoaded =
-    true;
-
-
-// ==========================================
-// EJS READY
-// ==========================================
-
-window.EJS_ready = function () {
-
-    log("EJS listo");
-
-    esperarGameManager();
-
-};
-
-
-// ==========================================
-// ESPERAR GAME MANAGER
-// ==========================================
-
-function esperarGameManager() {
-
-    if (
-        window.EJS_emulator &&
-        window.EJS_emulator.gameManager
-    ) {
-
-        log(
-            "✓ gameManager encontrado"
-        );
-
-        analizarLoop();
-
-        return;
-
-    }
-
-
-    log(
-        "Esperando gameManager..."
-    );
-
-
-    setTimeout(
-        esperarGameManager,
-        250
-    );
-
-}
-
-
-// ==========================================
-// ANALIZAR MAIN LOOP
-// ==========================================
-
-function analizarLoop() {
-
-    const manager =
-        window.EJS_emulator.gameManager;
-
-
-    log(
-        "Analizando main loop..."
-    );
-
-
-    // --------------------------------------
-    // COMPROBAR PROPIEDADES
-    // --------------------------------------
-
-    const propiedades =
-        Object.keys(manager);
-
-
-    log(
-        "Propiedades propias:"
-    );
-
-
-    if (
-        propiedades.length === 0
-    ) {
-
-        log(
-            "(ninguna)"
-        );
-
-    }
-    else {
-
-        log(
-            propiedades.join(", ")
-        );
-
-    }
-
-
-    // --------------------------------------
-    // BUSCAR VARIABLES RELACIONADAS
-    // --------------------------------------
-
-    const todas =
-        propiedades.filter(
-            function (nombre) {
-
-                return (
-                    nombre
-                        .toLowerCase()
-                        .includes("loop") ||
-                    nombre
-                        .toLowerCase()
-                        .includes("run") ||
-                    nombre
-                        .toLowerCase()
-                        .includes("pause") ||
-                    nombre
-                        .toLowerCase()
-                        .includes("start")
-                );
-
-            }
-        );
-
-
-    log(
-        "Variables loop/run:"
-    );
-
-
-    log(
-        todas.join(", ")
-    );
-
-
-    // --------------------------------------
-    // INTENTAR TOGGLE
-    // --------------------------------------
-
-    if (
-        typeof manager.toggleMainLoop ===
-        "function"
-    ) {
-
-        log(
-            "✓ toggleMainLoop existe"
-        );
-
-
-        setTimeout(
-            function () {
-
-                log(
-                    "Ejecutando toggleMainLoop()..."
-                );
-
-
-                try {
-
-                    manager.toggleMainLoop();
-
-
-                    log(
-                        "✓ toggleMainLoop ejecutado"
-                    );
-
-                    log(
-                        "Observa la pantalla..."
-                    );
-
-                }
-
-                catch (error) {
-
-                    log(
-                        "❌ Error: " +
-                        error
-                    );
-
-                }
-
-            },
-            500
-        );
-
-    }
-
-    else {
-
-        log(
-            "❌ toggleMainLoop no existe"
-        );
-
-    }
-
-}
+    window.EJS_volume = 0;
 
 </script>
 

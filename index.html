@@ -12,6 +12,7 @@
     <title>NFC Game Boy</title>
 
     <style>
+
         html,
         body {
             margin: 0;
@@ -26,45 +27,194 @@
             width: 100%;
             height: 100%;
         }
+
+        #diagnostico {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            z-index: 99999;
+
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff66;
+
+            padding: 12px;
+
+            font-family: monospace;
+            font-size: 12px;
+
+            max-height: 40vh;
+            overflow: auto;
+
+            border: 1px solid #00ff66;
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div id="game"></div>
+<div id="diagnostico">
+    Iniciando diagnóstico...
+</div>
 
-    <script>
+<div id="game"></div>
 
-        // ==========================================
-        // EMULATORJS
-        // ==========================================
 
-        window.EJS_player = "#game";
+<script>
 
-        // Game Boy
-        window.EJS_core = "gb";
+    const diagnostico =
+        document.getElementById("diagnostico");
 
-        // ROM
-        window.EJS_gameUrl = "games/Pokemon_Red.gb";
 
-        // Nombre
-        window.EJS_gameName = "NFC Game Boy";
+    function log(texto) {
 
-        // Datos del emulador
-        window.EJS_pathtodata =
-            "https://cdn.emulatorjs.org/stable/data/";
+        console.log(texto);
 
-        // Arranque automático
-        window.EJS_startOnLoaded = true;
+        diagnostico.innerHTML +=
+            "<br>" + texto;
 
-        // MODO DEBUG
-        window.EJS_DEBUG_XX = true;
+    }
 
-    </script>
 
-    <script
-        src="https://cdn.emulatorjs.org/stable/data/loader.js">
-    </script>
+    log("1. Página cargada");
+
+
+    // ==========================================
+    // EMULATORJS
+    // ==========================================
+
+    window.EJS_player = "#game";
+
+    window.EJS_core = "gb";
+
+    window.EJS_gameUrl = "games/Pokemon_Red.gb";
+
+    window.EJS_gameName = "NFC Game Boy";
+
+    window.EJS_pathtodata =
+        "https://cdn.emulatorjs.org/stable/data/";
+
+    window.EJS_startOnLoaded = true;
+
+    window.EJS_DEBUG_XX = true;
+
+
+    log("2. Configuración EmulatorJS creada");
+
+    log(
+        "ROM: " +
+        window.EJS_gameUrl
+    );
+
+    log(
+        "CDN: " +
+        window.EJS_pathtodata
+    );
+
+
+    // ==========================================
+    // CAPTURAR ERRORES
+    // ==========================================
+
+    window.onerror = function (
+        mensaje,
+        archivo,
+        linea,
+        columna,
+        error
+    ) {
+
+        log("❌ JAVASCRIPT ERROR");
+
+        log(
+            mensaje
+        );
+
+        if (archivo) {
+
+            log(
+                "Archivo: " +
+                archivo
+            );
+
+        }
+
+        if (linea) {
+
+            log(
+                "Línea: " +
+                linea
+            );
+
+        }
+
+    };
+
+
+    // ==========================================
+    // EJS READY
+    // ==========================================
+
+    window.EJS_ready = function () {
+
+        log(
+            "3. EJS_ready ejecutado"
+        );
+
+    };
+
+
+    log(
+        "4. Cargando loader.js..."
+    );
+
+</script>
+
+
+<script
+    src="https://cdn.emulatorjs.org/stable/data/loader.js">
+</script>
+
+
+<script>
+
+    log(
+        "5. loader.js terminó de cargar"
+    );
+
+
+    setTimeout(function () {
+
+        log(
+            "6. Estado después de 10 segundos"
+        );
+
+
+        if (
+            typeof EJS_emulator !==
+            "undefined"
+        ) {
+
+            log(
+                "EJS_emulator EXISTE"
+            );
+
+        } else {
+
+            log(
+                "❌ EJS_emulator NO EXISTE"
+            );
+
+        }
+
+
+    }, 10000);
+
+</script>
+
 
 </body>
 

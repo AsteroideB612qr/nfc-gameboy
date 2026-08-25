@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NFC Game Boy</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #game {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game"></div>
+
+    <script>
+        window.EJS_player = "#game";
+
+        /*
+         * Por ahora usaremos un juego de prueba.
+         * Más adelante reemplazaremos esta URL.
+         */
+        window.EJS_gameUrl = "games/test.gb";
+
+        /*
+         * Game Boy
+         */
+        window.EJS_core = "gb";
+
+        /*
+         * Nombre del juego
+         */
+        window.EJS_gameName = "NFC Game Boy";
+
+        /*
+         * Archivos del emulador
+         */
+        window.EJS_pathtodata =
+            "https://cdn.emulatorjs.org/stable/data/";
+
+        /*
+         * Arrancar automáticamente
+         */
+        window.EJS_startOnLoaded = true;
+    </script>
+
+    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+
+</body>
+</html>

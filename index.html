@@ -43,121 +43,146 @@
 
 <body>
 
-    <div id="game"></div>
+<div id="game"></div>
 
 
-    <script>
+<script>
 
-        // ==========================================
-        // CONFIGURACIÓN EMULATORJS
-        // ==========================================
+    // ==========================================
+    // EMULATORJS
+    // ==========================================
 
-        window.EJS_player = "#game";
+    window.EJS_player = "#game";
 
-        window.EJS_core = "gb";
+    window.EJS_core = "gb";
 
-        window.EJS_gameUrl = "games/Pokemon_Red.gb";
+    window.EJS_gameUrl = "games/test.gb";
 
-        window.EJS_gameName = "NFC Game Boy";
+    window.EJS_gameName = "NFC Game Boy";
 
-        window.EJS_pathtodata =
-            "https://cdn.emulatorjs.org/stable/data/";
+    window.EJS_pathtodata =
+        "https://cdn.emulatorjs.org/stable/data/";
 
-        // Intentar cargar automáticamente
-        window.EJS_startOnLoaded = true;
+    window.EJS_startOnLoaded = true;
 
 
-        // ==========================================
-        // CUANDO EMULATORJS ESTÉ LISTO
-        // ==========================================
+    // ==========================================
+    // CUANDO EL EMULADOR ESTÉ LISTO
+    // ==========================================
 
-        window.EJS_ready = function () {
+    window.EJS_ready = function () {
+
+        console.log("EJS listo");
+
+        esperarEmulador();
+
+    };
+
+
+    // ==========================================
+    // ESPERAR HASTA QUE EXISTAN LOS OBJETOS
+    // ==========================================
+
+    function esperarEmulador() {
+
+        if (
+            window.EJS_emulator &&
+            window.EJS_emulator.gameManager
+        ) {
 
             console.log(
-                "EmulatorJS listo"
+                "Emulador encontrado"
             );
 
-            iniciarJuego();
+            despertarJuego();
 
-        };
-
-
-        // ==========================================
-        // DESPERTAR EL CORE
-        // ==========================================
-
-        function iniciarJuego() {
+        } else {
 
             console.log(
-                "Intentando despertar el juego..."
+                "Esperando emulador..."
+            );
+
+            setTimeout(
+                esperarEmulador,
+                250
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // PAUSA → REANUDAR
+    // ==========================================
+
+    function despertarJuego() {
+
+        console.log(
+            "Intentando Pausa → Reanudar"
+        );
+
+
+        try {
+
+            // Primero pausamos
+
+            window.EJS_emulator.pause();
+
+
+            console.log(
+                "Pausa ejecutada"
             );
 
 
-            // Esperamos un poco para asegurarnos
-            // de que el core ya existe.
+            // Pequeña espera
 
             setTimeout(function () {
 
-                try {
-
-                    if (
-                        window.EJS_emulator &&
-                        typeof
-                        window.EJS_emulator.pause ===
-                        "function"
-                    ) {
-
-                        console.log(
-                            "Pausando..."
-                        );
-
-                        window.EJS_emulator.pause();
+                console.log(
+                    "Ejecutando Reanudar"
+                );
 
 
-                        setTimeout(function () {
+                /*
+                 * Intentamos usar play()
+                 */
 
-                            console.log(
-                                "Reanudando..."
-                            );
+                if (
+                    typeof
+                    window.EJS_emulator.play ===
+                    "function"
+                ) {
 
-                            if (
-                                window.EJS_emulator &&
-                                typeof
-                                window.EJS_emulator.play ===
-                                "function"
-                            ) {
+                    window.EJS_emulator.play();
 
-                                window.EJS_emulator.play();
-
-                                console.log(
-                                    "Juego reanudado."
-                                );
-
-                            }
-
-                        }, 100);
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "Error:",
-                        error
+                    console.log(
+                        "PLAY ejecutado"
                     );
 
                 }
 
-            }, 1000);
+            }, 300);
 
         }
 
-    </script>
+        catch (error) {
+
+            console.error(
+                "Error:",
+                error
+            );
+
+        }
+
+    }
+
+</script>
 
 
-    <script
-        src="https://cdn.emulatorjs.org/stable/data/loader.js">
-    </script>
+<script
+    src="https://cdn.emulatorjs.org/stable/data/loader.js">
+</script>
 
 
 </body>

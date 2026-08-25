@@ -253,10 +253,27 @@
         }
 
 
+        .game-name {
+
+            margin-top:
+                6px;
+
+            font-family:
+                monospace;
+
+            font-size:
+                15px;
+
+            font-weight:
+                bold;
+
+        }
+
+
         .hint {
 
             margin-top:
-                10px;
+                12px;
 
             font-family:
                 monospace;
@@ -271,28 +288,6 @@
 
         }
 
-
-        @keyframes parpadear {
-
-            0%,
-            100% {
-
-                opacity: 1;
-
-            }
-
-            50% {
-
-                opacity: .35;
-
-            }
-
-        }
-
-
-        /* =================================
-           ESTADO INICIANDO
-        ================================= */
 
         #estado {
 
@@ -333,7 +328,26 @@
 
             opacity: 0;
 
-            pointer-events: none;
+            pointer-events:
+                none;
+
+        }
+
+
+        @keyframes parpadear {
+
+            0%,
+            100% {
+
+                opacity: 1;
+
+            }
+
+            50% {
+
+                opacity: .35;
+
+            }
 
         }
 
@@ -406,6 +420,16 @@
     </div>
 
 
+    <div
+        id="nombreJuego"
+        class="game-name"
+    >
+
+        Cargando...
+
+    </div>
+
+
     <div class="hint">
 
         TOCA PARA JUGAR
@@ -432,201 +456,318 @@
 
 <script>
 
-    // ====================================
-    // CONFIGURACIÓN
-    // ====================================
 
-    window.EJS_player =
-        "#game";
+// ==========================================
+// CATÁLOGO DE JUEGOS
+// ==========================================
 
-    window.EJS_core =
-        "gb";
+const juegos = {
 
-    window.EJS_gameUrl =
-        "games/Pokemon_Red.gb";
+    red: {
 
-    window.EJS_gameName =
-        "NFC Game Boy";
+        nombre:
+            "POKÉMON RED",
 
-    window.EJS_pathtodata =
-        "https://cdn.emulatorjs.org/stable/data/";
+        rom:
+            "games/Pokemon_Red.gb"
 
-    window.EJS_startOnLoaded =
-        true;
+    },
 
 
-    // ====================================
-    // VARIABLES
-    // ====================================
+    tetris: {
 
-    let emulatorListo =
-        false;
+        nombre:
+            "TETRIS",
 
-    let usuarioToco =
-        false;
+        rom:
+            "games/Tetris.gb"
 
-
-    const intro =
-        document.getElementById(
-            "intro"
-        );
+    },
 
 
-    // ====================================
-    // DETECTAR EJS READY
-    // ====================================
+    zelda: {
 
-    window.EJS_ready =
-        function () {
+        nombre:
+            "ZELDA",
 
-            console.log(
-                "EmulatorJS listo"
-            );
-
-
-            emulatorListo =
-                true;
-
-
-            comprobarInicio();
-
-        };
-
-
-    // ====================================
-    // COMPROBAR
-    // ====================================
-
-    function comprobarInicio() {
-
-        if (
-            usuarioToco &&
-            emulatorListo
-        ) {
-
-            iniciarEmulador();
-
-        }
+        rom:
+            "games/Zelda.gb"
 
     }
 
-
-    // ====================================
-    // INICIAR
-    // ====================================
-
-    function iniciarEmulador() {
-
-        if (
-            intro.classList.contains(
-                "saliendo"
-            )
-        ) {
-
-            return;
-
-        }
+};
 
 
-        intro.classList.add(
-            "iniciando"
+// ==========================================
+// LEER ?game=
+// ==========================================
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+let codigoJuego =
+    parametros.get(
+        "game"
+    );
+
+
+// Si no existe ?game=
+// usamos Pokémon Red
+
+if (
+    !codigoJuego
+) {
+
+    codigoJuego =
+        "red";
+
+}
+
+
+// Convertir a minúsculas
+
+codigoJuego =
+    codigoJuego.toLowerCase();
+
+
+// ==========================================
+// BUSCAR JUEGO
+// ==========================================
+
+let juego =
+    juegos[codigoJuego];
+
+
+// Si el código no existe,
+// usamos Pokémon Red
+
+if (
+    !juego
+) {
+
+    juego =
+        juegos.red;
+
+    codigoJuego =
+        "red";
+
+}
+
+
+// ==========================================
+// MOSTRAR NOMBRE
+// ==========================================
+
+document.getElementById(
+    "nombreJuego"
+).textContent =
+    juego.nombre;
+
+
+// ==========================================
+// CONFIGURAR EMULATORJS
+// ==========================================
+
+window.EJS_player =
+    "#game";
+
+
+window.EJS_core =
+    "gb";
+
+
+window.EJS_gameUrl =
+    juego.rom;
+
+
+window.EJS_gameName =
+    juego.nombre;
+
+
+window.EJS_pathtodata =
+    "https://cdn.emulatorjs.org/stable/data/";
+
+
+window.EJS_startOnLoaded =
+    true;
+
+
+// ==========================================
+// VARIABLES
+// ==========================================
+
+let emulatorListo =
+    false;
+
+let usuarioToco =
+    false;
+
+
+const intro =
+    document.getElementById(
+        "intro"
+    );
+
+
+// ==========================================
+// EJS READY
+// ==========================================
+
+window.EJS_ready =
+    function () {
+
+        console.log(
+            "EmulatorJS listo"
         );
 
 
-        setTimeout(
-
-            function () {
-
-                intro.classList.add(
-                    "saliendo"
-                );
-
-
-                setTimeout(
-
-                    function () {
-
-                        intro.remove();
-
-                    },
-
-                    600
-
-                );
-
-            },
-
-            500
-
-        );
-
-    }
-
-
-    // ====================================
-    // TOQUE DEL USUARIO
-    // ====================================
-
-    function toqueUsuario(
-        evento
-    ) {
-
-        if (
-            usuarioToco
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            evento
-        ) {
-
-            evento.preventDefault();
-
-        }
-
-
-        usuarioToco =
+        emulatorListo =
             true;
-
-
-        intro.classList.add(
-            "iniciando"
-        );
 
 
         comprobarInicio();
 
+    };
+
+
+// ==========================================
+// COMPROBAR
+// ==========================================
+
+function comprobarInicio() {
+
+    if (
+        usuarioToco &&
+        emulatorListo
+    ) {
+
+        iniciarEmulador();
+
+    }
+
+}
+
+
+// ==========================================
+// INICIAR
+// ==========================================
+
+function iniciarEmulador() {
+
+    if (
+        intro.classList.contains(
+            "saliendo"
+        )
+    ) {
+
+        return;
+
     }
 
 
-    // ====================================
-    // EVENTOS
-    // ====================================
-
-    intro.addEventListener(
-
-        "click",
-
-        toqueUsuario
-
+    intro.classList.add(
+        "iniciando"
     );
 
 
-    intro.addEventListener(
+    setTimeout(
 
-        "touchend",
+        function () {
 
-        toqueUsuario,
+            intro.classList.add(
+                "saliendo"
+            );
 
-        {
-            passive: false
-        }
+
+            setTimeout(
+
+                function () {
+
+                    intro.remove();
+
+                },
+
+                600
+
+            );
+
+        },
+
+        500
 
     );
+
+}
+
+
+// ==========================================
+// TOQUE
+// ==========================================
+
+function toqueUsuario(
+    evento
+) {
+
+    if (
+        usuarioToco
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        evento
+    ) {
+
+        evento.preventDefault();
+
+    }
+
+
+    usuarioToco =
+        true;
+
+
+    intro.classList.add(
+        "iniciando"
+    );
+
+
+    comprobarInicio();
+
+}
+
+
+// ==========================================
+// EVENTOS
+// ==========================================
+
+intro.addEventListener(
+
+    "click",
+
+    toqueUsuario
+
+);
+
+
+intro.addEventListener(
+
+    "touchend",
+
+    toqueUsuario,
+
+    {
+        passive: false
+    }
+
+);
+
 
 </script>
 

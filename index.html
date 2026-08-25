@@ -41,7 +41,7 @@
 
 
         /* =================================
-           PANTALLA DE INICIO
+           INTRO
         ================================= */
 
         #intro {
@@ -60,16 +60,14 @@
 
             flex-direction: column;
 
-            background:
-                #9bbc0f;
+            background: #9bbc0f;
 
-            color:
-                #0f380f;
+            color: #0f380f;
 
             cursor: pointer;
 
             transition:
-                opacity 0.6s ease;
+                opacity .6s ease;
 
         }
 
@@ -86,8 +84,7 @@
 
             padding: 22px;
 
-            background:
-                #c6c6a8;
+            background: #c6c6a8;
 
             border-radius:
                 18px 18px 35px 18px;
@@ -99,9 +96,6 @@
 
                 0 12px 30px
                 rgba(0,0,0,.35);
-
-            transform:
-                translateY(0);
 
             animation:
                 flotar 2s
@@ -139,16 +133,13 @@
 
             height: 150px;
 
-            background:
-                #8bac0f;
+            background: #8bac0f;
 
             border:
-
                 7px solid
                 #555;
 
-            border-radius:
-                8px;
+            border-radius: 8px;
 
             display: flex;
 
@@ -168,7 +159,6 @@
                 20px;
 
             box-shadow:
-
                 inset 0 0 20px
                 rgba(0,0,0,.25);
 
@@ -287,15 +277,13 @@
             0%,
             100% {
 
-                opacity:
-                    1;
+                opacity: 1;
 
             }
 
             50% {
 
-                opacity:
-                    .35;
+                opacity: .35;
 
             }
 
@@ -303,19 +291,51 @@
 
 
         /* =================================
-           ANIMACIÓN DE SALIDA
+           ESTADO INICIANDO
         ================================= */
 
-        #intro.saliendo {
+        #estado {
 
-            opacity:
-                0;
+            display: none;
 
-            pointer-events:
-                none;
+            margin-top:
+                15px;
+
+            font-family:
+                monospace;
+
+            font-size:
+                14px;
+
+            font-weight:
+                bold;
 
         }
 
+
+        #intro.iniciando
+        .hint {
+
+            display: none;
+
+        }
+
+
+        #intro.iniciando
+        #estado {
+
+            display: block;
+
+        }
+
+
+        #intro.saliendo {
+
+            opacity: 0;
+
+            pointer-events: none;
+
+        }
 
     </style>
 
@@ -349,7 +369,6 @@
 
                 <div>
                     ▶ READY
-
                 </div>
 
             </div>
@@ -361,9 +380,7 @@
 
 
             <div class="cross">
-
                 ✚
-
             </div>
 
 
@@ -396,6 +413,13 @@
     </div>
 
 
+    <div id="estado">
+
+        INICIANDO...
+
+    </div>
+
+
 </div>
 
 
@@ -408,39 +432,39 @@
 
 <script>
 
-
     // ====================================
-    // CONFIGURACIÓN EMULATORJS
+    // CONFIGURACIÓN
     // ====================================
 
     window.EJS_player =
         "#game";
 
-
     window.EJS_core =
         "gb";
 
-
     window.EJS_gameUrl =
-        "games/Pokemon_Red.gb";
-
+        "games/test.gb";
 
     window.EJS_gameName =
         "NFC Game Boy";
 
-
     window.EJS_pathtodata =
         "https://cdn.emulatorjs.org/stable/data/";
-
 
     window.EJS_startOnLoaded =
         true;
 
 
+    // ====================================
+    // VARIABLES
+    // ====================================
 
-    // ====================================
-    // ELEMENTOS
-    // ====================================
+    let emulatorListo =
+        false;
+
+    let usuarioToco =
+        false;
+
 
     const intro =
         document.getElementById(
@@ -448,81 +472,163 @@
         );
 
 
+    // ====================================
+    // DETECTAR EJS READY
+    // ====================================
+
+    window.EJS_ready =
+        function () {
+
+            console.log(
+                "EmulatorJS listo"
+            );
+
+
+            emulatorListo =
+                true;
+
+
+            comprobarInicio();
+
+        };
+
+
+    // ====================================
+    // COMPROBAR
+    // ====================================
+
+    function comprobarInicio() {
+
+        if (
+            usuarioToco &&
+            emulatorListo
+        ) {
+
+            iniciarEmulador();
+
+        }
+
+    }
+
 
     // ====================================
     // INICIAR
     // ====================================
 
-    function iniciar() {
+    function iniciarEmulador() {
 
+        if (
+            intro.classList.contains(
+                "saliendo"
+            )
+        ) {
 
-        // Evitar dobles pulsaciones
+            return;
 
-        intro.removeEventListener(
-            "click",
-            iniciar
-        );
+        }
 
-
-        intro.removeEventListener(
-            "touchend",
-            iniciar
-        );
-
-
-        // Animación de salida
 
         intro.classList.add(
-            "saliendo"
+            "iniciando"
         );
 
-
-        // Eliminar completamente
-        // después de la animación
 
         setTimeout(
 
             function () {
 
-                intro.remove();
+                intro.classList.add(
+                    "saliendo"
+                );
+
+
+                setTimeout(
+
+                    function () {
+
+                        intro.remove();
+
+                    },
+
+                    600
+
+                );
 
             },
 
-            700
+            500
 
         );
 
     }
 
 
-
     // ====================================
-    // INTERACCIÓN
+    // TOQUE DEL USUARIO
     // ====================================
 
-    intro.addEventListener(
-        "click",
-        iniciar
-    );
+    function toqueUsuario(
+        evento
+    ) {
+
+        if (
+            usuarioToco
+        ) {
+
+            return;
+
+        }
 
 
-    intro.addEventListener(
-        "touchend",
-        function (evento) {
+        if (
+            evento
+        ) {
 
             evento.preventDefault();
 
-            iniciar();
-
-        },
-        {
-            passive: false
         }
+
+
+        usuarioToco =
+            true;
+
+
+        intro.classList.add(
+            "iniciando"
+        );
+
+
+        comprobarInicio();
+
+    }
+
+
+    // ====================================
+    // EVENTOS
+    // ====================================
+
+    intro.addEventListener(
+
+        "click",
+
+        toqueUsuario
+
     );
 
 
-</script>
+    intro.addEventListener(
 
+        "touchend",
+
+        toqueUsuario,
+
+        {
+            passive: false
+        }
+
+    );
+
+</script>
 
 
 <script

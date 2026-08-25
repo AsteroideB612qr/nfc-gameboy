@@ -41,7 +41,7 @@
 
 
         /* =================================
-           INTRO
+           PANTALLA DE INICIO
         ================================= */
 
         #intro {
@@ -126,7 +126,7 @@
 
 
         /* =================================
-           PANTALLA
+           PANTALLA DEL GAME BOY
         ================================= */
 
         .screen {
@@ -289,6 +289,10 @@
         }
 
 
+        /* =================================
+           ESTADO
+        ================================= */
+
         #estado {
 
             display: none;
@@ -360,7 +364,7 @@
 
 
 <!-- =====================================
-     INTRO
+     PANTALLA DE INICIO
 ===================================== -->
 
 <div id="intro">
@@ -448,7 +452,7 @@
 
 
 <!-- =====================================
-     EMULADOR
+     CONTENEDOR EMULADOR
 ===================================== -->
 
 <div id="game"></div>
@@ -457,11 +461,12 @@
 <script>
 
 
-// ==========================================
+// ==================================================
 // CATÁLOGO DE JUEGOS
-// ==========================================
+// ==================================================
 
 const juegos = {
+
 
     red: {
 
@@ -469,38 +474,47 @@ const juegos = {
             "POKÉMON RED",
 
         rom:
-            "games/Pokemon_Red.gb"
+            "games/Pokemon_Red.gb",
+
+        core:
+            "gb"
 
     },
 
 
-    tetris: {
+    crystal: {
 
         nombre:
-            "POKEMON CRYSTAL",
+            "POKÉMON CRYSTAL",
 
         rom:
-            "games/Pokemon_Crystal.gbc"
+            "games/Pokemon_Crystal.gbc",
+
+        core:
+            "gbc"
 
     },
 
 
-    zelda: {
+    yellow: {
 
         nombre:
-            "POKEMON YELLOW",
+            "POKÉMON YELLOW",
 
         rom:
-            "games/Pokemon_Yellow.gbc"
+            "games/Pokemon_Yellow.gbc",
+
+        core:
+            "gbc"
 
     }
 
 };
 
 
-// ==========================================
-// LEER ?game=
-// ==========================================
+// ==================================================
+// LEER PARÁMETRO ?game=
+// ==================================================
 
 const parametros =
     new URLSearchParams(
@@ -514,8 +528,9 @@ let codigoJuego =
     );
 
 
-// Si no existe ?game=
-// usamos Pokémon Red
+// ==================================================
+// JUEGO POR DEFECTO
+// ==================================================
 
 if (
     !codigoJuego
@@ -533,16 +548,16 @@ codigoJuego =
     codigoJuego.toLowerCase();
 
 
-// ==========================================
-// BUSCAR JUEGO
-// ==========================================
+// ==================================================
+// OBTENER JUEGO
+// ==================================================
 
 let juego =
     juegos[codigoJuego];
 
 
 // Si el código no existe,
-// usamos Pokémon Red
+// usar Pokémon Red
 
 if (
     !juego
@@ -557,9 +572,9 @@ if (
 }
 
 
-// ==========================================
+// ==================================================
 // MOSTRAR NOMBRE
-// ==========================================
+// ==================================================
 
 document.getElementById(
     "nombreJuego"
@@ -567,36 +582,49 @@ document.getElementById(
     juego.nombre;
 
 
-// ==========================================
+// ==================================================
 // CONFIGURAR EMULATORJS
-// ==========================================
+// ==================================================
+
+// Player
 
 window.EJS_player =
     "#game";
 
 
-window.EJS_core = juego.core;
+// CORE
 
+window.EJS_core =
+    juego.core;
+
+
+// ROM
 
 window.EJS_gameUrl =
     juego.rom;
 
 
+// Nombre
+
 window.EJS_gameName =
     juego.nombre;
 
+
+// Datos EmulatorJS
 
 window.EJS_pathtodata =
     "https://cdn.emulatorjs.org/stable/data/";
 
 
+// Arrancar cuando esté cargado
+
 window.EJS_startOnLoaded =
     true;
 
 
-// ==========================================
-// VARIABLES
-// ==========================================
+// ==================================================
+// VARIABLES DE CONTROL
+// ==================================================
 
 let emulatorListo =
     false;
@@ -605,15 +633,17 @@ let usuarioToco =
     false;
 
 
+// Elemento intro
+
 const intro =
     document.getElementById(
         "intro"
     );
 
 
-// ==========================================
+// ==================================================
 // EJS READY
-// ==========================================
+// ==================================================
 
 window.EJS_ready =
     function () {
@@ -632,9 +662,9 @@ window.EJS_ready =
     };
 
 
-// ==========================================
-// COMPROBAR
-// ==========================================
+// ==================================================
+// COMPROBAR SI PODEMOS INICIAR
+// ==================================================
 
 function comprobarInicio() {
 
@@ -650,11 +680,12 @@ function comprobarInicio() {
 }
 
 
-// ==========================================
-// INICIAR
-// ==========================================
+// ==================================================
+// QUITAR PANTALLA DE INICIO
+// ==================================================
 
 function iniciarEmulador() {
+
 
     if (
         intro.classList.contains(
@@ -676,6 +707,7 @@ function iniciarEmulador() {
 
         function () {
 
+
             intro.classList.add(
                 "saliendo"
             );
@@ -693,6 +725,7 @@ function iniciarEmulador() {
 
             );
 
+
         },
 
         500
@@ -702,13 +735,14 @@ function iniciarEmulador() {
 }
 
 
-// ==========================================
-// TOQUE
-// ==========================================
+// ==================================================
+// TOQUE REAL DEL USUARIO
+// ==================================================
 
 function toqueUsuario(
     evento
 ) {
+
 
     if (
         usuarioToco
@@ -742,9 +776,9 @@ function toqueUsuario(
 }
 
 
-// ==========================================
-// EVENTOS
-// ==========================================
+// ==================================================
+// EVENTOS DE USUARIO
+// ==================================================
 
 intro.addEventListener(
 
@@ -770,6 +804,10 @@ intro.addEventListener(
 
 </script>
 
+
+<!-- =================================================
+     EMULATORJS
+================================================= -->
 
 <script
     src="https://cdn.emulatorjs.org/stable/data/loader.js">

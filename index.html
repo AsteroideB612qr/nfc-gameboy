@@ -26,83 +26,33 @@
 
 <body>
 
-    <!-- Contenedor del emulador -->
-    <div id="game"></div>
+<div id="game"></div>
 
+<script>
 
-    <!-- Configuración de EmulatorJS -->
-    <script>
+    // ==========================================
+    // CONFIGURACIÓN EMULATORJS
+    // ==========================================
 
-        EJS_player = "#game";
+    EJS_player = "#game";
 
-        // Núcleo de Game Boy
-        EJS_core = "gb";
+    EJS_core = "gb";
 
-        // ROM
-        EJS_gameUrl = "games/Pokemon_Red.gb";
+    EJS_gameUrl = "games/test.gb";
 
-        // Nombre mostrado por el emulador
-        EJS_gameName = "NFC Game Boy";
+    EJS_gameName = "NFC Game Boy";
 
-        // NO iniciar inmediatamente
-        EJS_startOnLoaded = false;
+    EJS_pathtodata =
+        "https://cdn.emulatorjs.org/stable/data/";
 
-        // Datos de EmulatorJS
-        EJS_pathtodata =
-            "https://cdn.emulatorjs.org/stable/data/";
+    // Inicio automático
+    EJS_startOnLoaded = true;
 
-    </script>
+</script>
 
-
-    <!-- Cargador de EmulatorJS -->
-    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
-
-
-    <!-- Arranque automático -->
-    <script>
-
-        window.addEventListener("load", function () {
-
-            console.log("Página cargada.");
-
-            setTimeout(function () {
-
-                console.log("Intentando iniciar el juego...");
-
-                try {
-
-                    if (
-                        typeof EJS !== "undefined" &&
-                        typeof EJS_emulator !== "undefined" &&
-                        EJS_emulator.gameManager
-                    ) {
-
-                        console.log("Emulador encontrado.");
-
-                        EJS_emulator.gameManager.restart();
-
-                    } else {
-
-                        console.log(
-                            "El emulador todavía no está listo."
-                        );
-
-                    }
-
-                } catch (error) {
-
-                    console.log(
-                        "Error al iniciar:",
-                        error
-                    );
-
-                }
-
-            }, 5000);
-
-        });
-
-    </script>
+<script
+    src="https://cdn.emulatorjs.org/stable/data/loader.js">
+</script>
 
 </body>
 </html>

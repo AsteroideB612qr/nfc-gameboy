@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,26 +13,38 @@
     <title>NFC Game Boy</title>
 
     <style>
+
         html,
         body {
+
             margin: 0;
             padding: 0;
+
             width: 100%;
             height: 100%;
+
             background: #111;
+
             overflow: hidden;
+
         }
 
         #game {
+
             width: 100%;
             height: 100%;
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
     <div id="game"></div>
+
 
     <script>
 
@@ -41,38 +54,111 @@
 
         window.EJS_player = "#game";
 
-        // Núcleo Game Boy
         window.EJS_core = "gb";
 
-        // ROM
-        window.EJS_gameUrl = "games/Pokemon_Red.gb";
+        window.EJS_gameUrl = "games/test.gb";
 
-        // Nombre del juego
         window.EJS_gameName = "NFC Game Boy";
 
-        // Datos del emulador
         window.EJS_pathtodata =
             "https://cdn.emulatorjs.org/stable/data/";
 
-        // Intentar iniciar automáticamente
+        // Intentar cargar automáticamente
         window.EJS_startOnLoaded = true;
 
-        // Se ejecuta cuando EmulatorJS considera
-        // que el juego realmente comenzó
-        window.EJS_onGameStart = function () {
 
-            console.log("🎮 JUEGO INICIADO");
+        // ==========================================
+        // CUANDO EMULATORJS ESTÉ LISTO
+        // ==========================================
+
+        window.EJS_ready = function () {
+
+            console.log(
+                "EmulatorJS listo"
+            );
+
+            iniciarJuego();
 
         };
 
+
+        // ==========================================
+        // DESPERTAR EL CORE
+        // ==========================================
+
+        function iniciarJuego() {
+
+            console.log(
+                "Intentando despertar el juego..."
+            );
+
+
+            // Esperamos un poco para asegurarnos
+            // de que el core ya existe.
+
+            setTimeout(function () {
+
+                try {
+
+                    if (
+                        window.EJS_emulator &&
+                        typeof
+                        window.EJS_emulator.pause ===
+                        "function"
+                    ) {
+
+                        console.log(
+                            "Pausando..."
+                        );
+
+                        window.EJS_emulator.pause();
+
+
+                        setTimeout(function () {
+
+                            console.log(
+                                "Reanudando..."
+                            );
+
+                            if (
+                                window.EJS_emulator &&
+                                typeof
+                                window.EJS_emulator.play ===
+                                "function"
+                            ) {
+
+                                window.EJS_emulator.play();
+
+                                console.log(
+                                    "Juego reanudado."
+                                );
+
+                            }
+
+                        }, 100);
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Error:",
+                        error
+                    );
+
+                }
+
+            }, 1000);
+
+        }
+
     </script>
 
-
-    <!-- Cargador de EmulatorJS -->
 
     <script
         src="https://cdn.emulatorjs.org/stable/data/loader.js">
     </script>
+
 
 </body>
 

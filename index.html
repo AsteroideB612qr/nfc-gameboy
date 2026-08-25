@@ -118,7 +118,7 @@ window.EJS_startOnLoaded =
 
 
 // ==========================================
-// EJS READY
+// CUANDO EMULATORJS ESTÉ LISTO
 // ==========================================
 
 window.EJS_ready = function () {
@@ -127,84 +127,78 @@ window.EJS_ready = function () {
         "EJS listo"
     );
 
-    iniciarDespertar();
+    buscarReiniciar();
 
 };
 
 
 // ==========================================
-// BUSCAR BOTÓN
+// BUSCAR BOTÓN REINICIAR
 // ==========================================
 
-function buscarBoton(texto) {
-
-    const botones =
-        document.querySelectorAll(
-            "button"
-        );
-
-
-    for (
-        let i = 0;
-        i < botones.length;
-        i++
-    ) {
-
-        const boton =
-            botones[i];
-
-
-        const contenido =
-            (
-                boton.innerText ||
-                ""
-            ).trim();
-
-
-        if (
-            contenido === texto
-        ) {
-
-            return boton;
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-// ==========================================
-// PAUSA → REANUDAR
-// ==========================================
-
-function iniciarDespertar() {
+function buscarReiniciar() {
 
     log(
-        "Esperando 2 segundos..."
+        "Esperando a que aparezca Reiniciar..."
     );
 
 
     setTimeout(function () {
 
-        log(
-            "Buscando botón Pausar..."
-        );
-
-
-        const botonPausa =
-            buscarBoton(
-                "Pausar"
+        const botones =
+            document.querySelectorAll(
+                "button"
             );
 
 
-        if (!botonPausa) {
+        let botonReiniciar =
+            null;
+
+
+        for (
+            let i = 0;
+            i < botones.length;
+            i++
+        ) {
+
+            const boton =
+                botones[i];
+
+
+            const texto =
+                (
+                    boton.innerText ||
+                    ""
+                ).trim();
+
+
+            if (
+                texto === "Reiniciar"
+            ) {
+
+                botonReiniciar =
+                    boton;
+
+                break;
+
+            }
+
+        }
+
+
+        if (!botonReiniciar) {
 
             log(
-                "❌ No encontré Pausar"
+                "❌ No encontré Reiniciar"
+            );
+
+            // Volvemos a intentar
+            // porque el menú puede
+            // tardar en construirse.
+
+            setTimeout(
+                buscarReiniciar,
+                500
             );
 
             return;
@@ -212,73 +206,33 @@ function iniciarDespertar() {
 
 
         log(
-            "✓ Encontré Pausar"
+            "✓ Encontré Reiniciar"
         );
 
 
         // ==================================
-        // HACER CLICK
+        // EJECUTAR REINICIAR
         // ==================================
 
-        botonPausa.click();
+        log(
+            "Ejecutando Reiniciar..."
+        );
+
+
+        botonReiniciar.click();
 
 
         log(
-            "✓ Pausar ejecutado"
+            "✓ Reiniciar ejecutado"
         );
 
 
-        // ==================================
-        // ESPERAR
-        // ==================================
-
-        setTimeout(function () {
-
-            log(
-                "Buscando Reanudar..."
-            );
+        log(
+            "🎮 El juego debería iniciar"
+        );
 
 
-            const botonReanudar =
-                buscarBoton(
-                    "Reanudar"
-                );
-
-
-            if (
-                !botonReanudar
-            ) {
-
-                log(
-                    "❌ No encontré Reanudar"
-                );
-
-                return;
-            }
-
-
-            log(
-                "✓ Encontré Reanudar"
-            );
-
-
-            botonReanudar.click();
-
-
-            log(
-                "✓ REANUDAR EJECUTADO"
-            );
-
-
-            log(
-                "🎮 Ahora debería iniciar el juego"
-            );
-
-
-        }, 500);
-
-
-    }, 2000);
+    }, 1500);
 
 }
 

@@ -29,6 +29,53 @@
 
         }
 
+        #inicio {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 100000;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #303030,
+                    #111
+                );
+
+        }
+
+
+        #botonInicio {
+
+            padding: 20px 40px;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: white;
+
+            background: #1d72f3;
+
+            border: none;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,.5);
+
+        }
+
+
         #game {
 
             width: 100%;
@@ -44,34 +91,86 @@
 <body>
 
 
+<!-- ======================================
+     PANTALLA DE INICIO
+====================================== -->
+
+<div id="inicio">
+
+    <button id="botonInicio">
+
+        🎮 INICIAR JUEGO
+
+    </button>
+
+</div>
+
+
+<!-- ======================================
+     EMULADOR
+====================================== -->
+
 <div id="game"></div>
 
 
 <script>
 
-    // ==========================================
-    // EMULATORJS
-    // ==========================================
+    // ======================================
+    // CONFIGURACIÓN EMULATORJS
+    // ======================================
 
-    window.EJS_player = "#game";
+    window.EJS_player =
+        "#game";
 
-    window.EJS_core = "gb";
+    window.EJS_core =
+        "gb";
 
-    window.EJS_gameUrl = "games/Pokemon_Red.gb";
+    window.EJS_gameUrl =
+        "games/Pokemon_Red.gb";
 
-    window.EJS_gameName = "NFC Game Boy";
+    window.EJS_gameName =
+        "NFC Game Boy";
 
     window.EJS_pathtodata =
         "https://cdn.emulatorjs.org/stable/data/";
 
-    // Arrancar automáticamente
-    window.EJS_startOnLoaded = true;
+    window.EJS_startOnLoaded =
+        true;
 
-    // ==========================================
-    // PRUEBA: SIN AUDIO
-    // ==========================================
 
-    window.EJS_volume = 0;
+    // ======================================
+    // BOTÓN
+    // ======================================
+
+    const boton =
+        document.getElementById(
+            "botonInicio"
+        );
+
+
+    const pantalla =
+        document.getElementById(
+            "inicio"
+        );
+
+
+    boton.addEventListener(
+        "click",
+        function () {
+
+            console.log(
+                "INICIAR pulsado"
+            );
+
+
+            // Ocultar pantalla inicial
+
+            pantalla.style.display =
+                "none";
+
+
+        }
+    );
 
 </script>
 

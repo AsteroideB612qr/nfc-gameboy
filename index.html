@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -10,26 +13,38 @@
     <title>NFC Game Boy</title>
 
     <style>
+
         html,
         body {
+
             margin: 0;
             padding: 0;
+
             width: 100%;
             height: 100%;
+
             background: #111;
+
             overflow: hidden;
+
         }
 
         #game {
+
             width: 100%;
             height: 100%;
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
     <div id="game"></div>
+
 
     <script>
 
@@ -45,26 +60,21 @@
         // ROM
         window.EJS_gameUrl = "games/Pokemon_Red.gb";
 
-        // Nombre del juego
+        // Nombre
         window.EJS_gameName = "NFC Game Boy";
 
-        // Datos del emulador
+        // CDN
         window.EJS_pathtodata =
             "https://cdn.emulatorjs.org/stable/data/";
 
         // Arranque automático
         window.EJS_startOnLoaded = true;
 
+        // Carga suave
+        window.EJS_softLoad = true;
 
-        // ==========================================
-        // CUANDO EMULATORJS ESTÉ LISTO
-        // ==========================================
-
-        window.EJS_ready = function () {
-
-            console.log("EmulatorJS está listo.");
-
-        };
+        // No mostrar anuncio
+        window.EJS_AdUrl = "";
 
     </script>
 
@@ -73,5 +83,7 @@
         src="https://cdn.emulatorjs.org/stable/data/loader.js">
     </script>
 
+
 </body>
+
 </html>

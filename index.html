@@ -2,7 +2,6 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -38,12 +37,11 @@
 
             left: 5px;
             right: 5px;
-
             bottom: 5px;
 
             z-index: 999999;
 
-            background: rgba(0,0,0,.90);
+            background: rgba(0, 0, 0, 0.92);
 
             color: #00ff66;
 
@@ -53,10 +51,9 @@
 
             font-size: 11px;
 
-            max-height: 35vh;
+            max-height: 40vh;
 
             overflow: auto;
-
         }
 
     </style>
@@ -66,12 +63,10 @@
 
 <body>
 
-
 <div id="game"></div>
 
-
 <div id="diagnostico">
-    Preparando...
+    Iniciando...
 </div>
 
 
@@ -122,241 +117,151 @@ window.EJS_startOnLoaded =
 
 window.EJS_ready = function () {
 
-    log(
-        "EJS listo"
-    );
+    log("EJS listo");
 
-    buscarReiniciar();
+    esperarGameManager();
 
 };
 
 
 // ==========================================
-// BUSCAR REINICIAR
+// ESPERAR GAME MANAGER REAL
 // ==========================================
 
-function buscarReiniciar() {
+function esperarGameManager() {
 
-    setTimeout(function () {
-
-        const botones =
-            document.querySelectorAll(
-                "button"
-            );
+    const emulator =
+        window.EJS_emulator;
 
 
-        let boton =
-            null;
+    const manager =
+        emulator &&
+        emulator.gameManager;
 
 
-        for (
-            let i = 0;
-            i < botones.length;
-            i++
-        ) {
-
-            const texto =
-                (
-                    botones[i].innerText ||
-                    ""
-                ).trim();
-
-
-            if (
-                texto === "Reiniciar"
-            ) {
-
-                boton =
-                    botones[i];
-
-                break;
-
-            }
-
-        }
-
-
-        if (!boton) {
-
-            log(
-                "Esperando botón Reiniciar..."
-            );
-
-            setTimeout(
-                buscarReiniciar,
-                500
-            );
-
-            return;
-
-        }
-
+    if (!manager) {
 
         log(
-            "✓ Botón Reiniciar encontrado"
+            "Esperando gameManager..."
         );
 
-
-        simularToque(
-            boton
+        setTimeout(
+            esperarGameManager,
+            200
         );
 
-    }, 2000);
+        return;
+    }
 
-}
-
-
-// ==========================================
-// SIMULAR INTERACCIÓN
-// ==========================================
-
-function simularToque(
-    elemento
-) {
 
     log(
-        "Enviando eventos táctiles..."
+        "✓ gameManager encontrado"
     );
 
 
-    try {
+    // Mostrar los métodos disponibles
 
-        // ----------------------------------
-        // POINTER DOWN
-        // ----------------------------------
+    const metodos =
+        Object.keys(manager)
+            .filter(function (key) {
 
-        elemento.dispatchEvent(
+                return typeof
+                    manager[key] ===
+                    "function";
 
-            new PointerEvent(
-                "pointerdown",
-                {
-                    bubbles: true,
-                    cancelable: true,
-                    pointerId: 1,
-                    pointerType: "touch",
-                    isPrimary: true,
-                    buttons: 1
-                }
-            )
+            });
 
+
+    log(
+        "Métodos propios:"
+    );
+
+
+    log(
+        metodos.join(", ")
+    );
+
+
+    // También revisar prototype
+
+    let proto =
+        Object.getPrototypeOf(
+            manager
         );
 
 
-        // ----------------------------------
-        // TOUCH START
-        // ----------------------------------
+    if (proto) {
 
-        try {
-
-            elemento.dispatchEvent(
-
-                new TouchEvent(
-                    "touchstart",
-                    {
-                        bubbles: true,
-                        cancelable: true
-                    }
-                )
-
+        const protoMetodos =
+            Object.getOwnPropertyNames(
+                proto
             );
 
-        }
 
-        catch (e) {
-
-            log(
-                "TouchEvent no disponible"
-            );
-
-        }
+        log(
+            "Métodos prototype:"
+        );
 
 
-        // ----------------------------------
-        // PEQUEÑA PAUSA
-        // ----------------------------------
-
-        setTimeout(
-            function () {
-
-
-                // --------------------------
-                // POINTER UP
-                // --------------------------
-
-                elemento.dispatchEvent(
-
-                    new PointerEvent(
-                        "pointerup",
-                        {
-                            bubbles: true,
-                            cancelable: true,
-                            pointerId: 1,
-                            pointerType: "touch",
-                            isPrimary: true,
-                            buttons: 0
-                        }
-                    )
-
-                );
-
-
-                // --------------------------
-                // TOUCH END
-                // --------------------------
-
-                try {
-
-                    elemento.dispatchEvent(
-
-                        new TouchEvent(
-                            "touchend",
-                            {
-                                bubbles: true,
-                                cancelable: true
-                            }
-                        )
-
-                    );
-
-                }
-
-                catch (e) {
-
-                    log(
-                        "TouchEnd no disponible"
-                    );
-
-                }
-
-
-                // --------------------------
-                // CLICK
-                // --------------------------
-
-                elemento.click();
-
-
-                log(
-                    "✓ Secuencia enviada"
-                );
-
-
-                log(
-                    "¿Arrancó el juego?"
-                );
-
-
-            },
-            150
+        log(
+            protoMetodos.join(", ")
         );
 
     }
 
-    catch (error) {
+
+    // ======================================
+    // BUSCAR RESTART
+    // ======================================
+
+    if (
+        typeof manager.restart ===
+        "function"
+    ) {
 
         log(
-            "❌ Error: " +
-            error
+            "✓ manager.restart EXISTE"
+        );
+
+
+        setTimeout(
+            function () {
+
+                log(
+                    "Ejecutando manager.restart()..."
+                );
+
+
+                try {
+
+                    manager.restart();
+
+
+                    log(
+                        "✓ restart ejecutado"
+                    );
+
+                }
+
+                catch (error) {
+
+                    log(
+                        "❌ Error restart: " +
+                        error
+                    );
+
+                }
+
+            },
+            500
+        );
+
+    }
+
+    else {
+
+        log(
+            "❌ manager.restart NO EXISTE"
         );
 
     }

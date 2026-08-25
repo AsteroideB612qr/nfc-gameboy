@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -15,6 +16,7 @@
 
         html,
         body {
+
             margin: 0;
             padding: 0;
 
@@ -24,11 +26,14 @@
             background: #111;
 
             overflow: hidden;
+
         }
 
         #game {
+
             width: 100%;
             height: 100%;
+
         }
 
         #diagnostico {
@@ -41,7 +46,7 @@
 
             z-index: 999999;
 
-            background: rgba(0, 0, 0, 0.92);
+            background: rgba(0,0,0,.92);
 
             color: #00ff66;
 
@@ -54,6 +59,7 @@
             max-height: 40vh;
 
             overflow: auto;
+
         }
 
     </style>
@@ -63,7 +69,9 @@
 
 <body>
 
+
 <div id="game"></div>
+
 
 <div id="diagnostico">
     Iniciando...
@@ -89,7 +97,7 @@ function log(texto) {
 
 
 // ==========================================
-// CONFIGURACIÓN
+// CONFIGURACIÓN EMULATORJS
 // ==========================================
 
 window.EJS_player =
@@ -99,7 +107,7 @@ window.EJS_core =
     "gb";
 
 window.EJS_gameUrl =
-    "games/Pokemon_Red.gb";
+    "games/test.gb";
 
 window.EJS_gameName =
     "NFC Game Boy";
@@ -125,102 +133,134 @@ window.EJS_ready = function () {
 
 
 // ==========================================
-// ESPERAR GAME MANAGER REAL
+// ESPERAR GAME MANAGER
 // ==========================================
 
 function esperarGameManager() {
 
-    const emulator =
-        window.EJS_emulator;
-
-
-    const manager =
-        emulator &&
-        emulator.gameManager;
-
-
-    if (!manager) {
+    if (
+        window.EJS_emulator &&
+        window.EJS_emulator.gameManager
+    ) {
 
         log(
-            "Esperando gameManager..."
+            "✓ gameManager encontrado"
         );
 
-        setTimeout(
-            esperarGameManager,
-            200
-        );
+        analizarLoop();
 
         return;
-    }
-
-
-    log(
-        "✓ gameManager encontrado"
-    );
-
-
-    // Mostrar los métodos disponibles
-
-    const metodos =
-        Object.keys(manager)
-            .filter(function (key) {
-
-                return typeof
-                    manager[key] ===
-                    "function";
-
-            });
-
-
-    log(
-        "Métodos propios:"
-    );
-
-
-    log(
-        metodos.join(", ")
-    );
-
-
-    // También revisar prototype
-
-    let proto =
-        Object.getPrototypeOf(
-            manager
-        );
-
-
-    if (proto) {
-
-        const protoMetodos =
-            Object.getOwnPropertyNames(
-                proto
-            );
-
-
-        log(
-            "Métodos prototype:"
-        );
-
-
-        log(
-            protoMetodos.join(", ")
-        );
 
     }
 
 
-    // ======================================
-    // BUSCAR RESTART
-    // ======================================
+    log(
+        "Esperando gameManager..."
+    );
+
+
+    setTimeout(
+        esperarGameManager,
+        250
+    );
+
+}
+
+
+// ==========================================
+// ANALIZAR MAIN LOOP
+// ==========================================
+
+function analizarLoop() {
+
+    const manager =
+        window.EJS_emulator.gameManager;
+
+
+    log(
+        "Analizando main loop..."
+    );
+
+
+    // --------------------------------------
+    // COMPROBAR PROPIEDADES
+    // --------------------------------------
+
+    const propiedades =
+        Object.keys(manager);
+
+
+    log(
+        "Propiedades propias:"
+    );
+
 
     if (
-        typeof manager.restart ===
+        propiedades.length === 0
+    ) {
+
+        log(
+            "(ninguna)"
+        );
+
+    }
+    else {
+
+        log(
+            propiedades.join(", ")
+        );
+
+    }
+
+
+    // --------------------------------------
+    // BUSCAR VARIABLES RELACIONADAS
+    // --------------------------------------
+
+    const todas =
+        propiedades.filter(
+            function (nombre) {
+
+                return (
+                    nombre
+                        .toLowerCase()
+                        .includes("loop") ||
+                    nombre
+                        .toLowerCase()
+                        .includes("run") ||
+                    nombre
+                        .toLowerCase()
+                        .includes("pause") ||
+                    nombre
+                        .toLowerCase()
+                        .includes("start")
+                );
+
+            }
+        );
+
+
+    log(
+        "Variables loop/run:"
+    );
+
+
+    log(
+        todas.join(", ")
+    );
+
+
+    // --------------------------------------
+    // INTENTAR TOGGLE
+    // --------------------------------------
+
+    if (
+        typeof manager.toggleMainLoop ===
         "function"
     ) {
 
         log(
-            "✓ manager.restart EXISTE"
+            "✓ toggleMainLoop existe"
         );
 
 
@@ -228,17 +268,21 @@ function esperarGameManager() {
             function () {
 
                 log(
-                    "Ejecutando manager.restart()..."
+                    "Ejecutando toggleMainLoop()..."
                 );
 
 
                 try {
 
-                    manager.restart();
+                    manager.toggleMainLoop();
 
 
                     log(
-                        "✓ restart ejecutado"
+                        "✓ toggleMainLoop ejecutado"
+                    );
+
+                    log(
+                        "Observa la pantalla..."
                     );
 
                 }
@@ -246,7 +290,7 @@ function esperarGameManager() {
                 catch (error) {
 
                     log(
-                        "❌ Error restart: " +
+                        "❌ Error: " +
                         error
                     );
 
@@ -261,7 +305,7 @@ function esperarGameManager() {
     else {
 
         log(
-            "❌ manager.restart NO EXISTE"
+            "❌ toggleMainLoop no existe"
         );
 
     }

@@ -14,7 +14,6 @@
             height: 100%;
             background: #111;
             overflow: hidden;
-            font-family: Arial, sans-serif;
         }
 
         #game {
@@ -31,35 +30,19 @@
     <script>
         window.EJS_player = "#game";
 
-        /*
-         * Por ahora usaremos un juego de prueba.
-         * Más adelante reemplazaremos esta URL.
-         */
-        window.EJS_gameUrl = "games/test.gb";
-
-        /*
-         * Game Boy
-         */
         window.EJS_core = "gb";
 
-        /*
-         * Nombre del juego
-         */
+        window.EJS_gameUrl = "games/test.gb";
+
         window.EJS_gameName = "NFC Game Boy";
 
-        /*
-         * Archivos del emulador
-         */
-        window.EJS_pathtodata =
-            "https://cdn.emulatorjs.org/stable/data/";
-
-        /*
-         * Arrancar automáticamente
-         */
         window.EJS_startOnLoaded = true;
+
+        window.EJS_pathtodata =
+            "https://cdn.emulatorjs.org/4.2.3/data/";
     </script>
 
-    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+    <script src="https://cdn.emulatorjs.org/4.2.3/data/loader.js"></script>
 
 </body>
 </html>

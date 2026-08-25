@@ -18,13 +18,17 @@
         body {
             margin: 0;
             padding: 0;
+
             width: 100%;
             height: 100%;
+
             background: #111;
+
             overflow: hidden;
         }
 
         #game {
+
             width: 100%;
             height: 100%;
         }
@@ -39,7 +43,7 @@
 
             z-index: 999999;
 
-            background: rgba(0,0,0,.90);
+            background: rgba(0, 0, 0, 0.9);
 
             color: #00ff66;
 
@@ -52,7 +56,6 @@
             max-height: 35vh;
 
             overflow: auto;
-
         }
 
     </style>
@@ -62,17 +65,23 @@
 
 <body>
 
+
 <div id="game"></div>
 
+
 <div id="diagnostico">
-    Iniciando...
+
+    Preparando...
+
 </div>
 
 
 <script>
 
 const D =
-    document.getElementById("diagnostico");
+    document.getElementById(
+        "diagnostico"
+    );
 
 
 function log(texto) {
@@ -86,14 +95,17 @@ function log(texto) {
 
 
 // ==========================================
-// EMULATORJS
+// CONFIGURACIÓN EMULATORJS
 // ==========================================
 
-window.EJS_player = "#game";
+window.EJS_player =
+    "#game";
 
-window.EJS_core = "gb";
+window.EJS_core =
+    "gb";
 
-window.EJS_gameUrl = "games/Pokemon_Red.gb";
+window.EJS_gameUrl =
+    "games/Pokemon_Red.gb";
 
 window.EJS_gameName =
     "NFC Game Boy";
@@ -101,72 +113,169 @@ window.EJS_gameName =
 window.EJS_pathtodata =
     "https://cdn.emulatorjs.org/stable/data/";
 
-window.EJS_startOnLoaded = true;
+window.EJS_startOnLoaded =
+    true;
 
 
 // ==========================================
-// CUANDO EJS ESTÉ LISTO
+// EJS READY
 // ==========================================
 
 window.EJS_ready = function () {
 
-    log("EJS READY");
+    log(
+        "EJS listo"
+    );
 
-    buscarMenu();
+    iniciarDespertar();
 
 };
 
 
 // ==========================================
-// BUSCAR ELEMENTOS DEL MENÚ
+// BUSCAR BOTÓN
 // ==========================================
 
-function buscarMenu() {
+function buscarBoton(texto) {
 
-    log("Buscando elementos...");
+    const botones =
+        document.querySelectorAll(
+            "button"
+        );
+
+
+    for (
+        let i = 0;
+        i < botones.length;
+        i++
+    ) {
+
+        const boton =
+            botones[i];
+
+
+        const contenido =
+            (
+                boton.innerText ||
+                ""
+            ).trim();
+
+
+        if (
+            contenido === texto
+        ) {
+
+            return boton;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+// ==========================================
+// PAUSA → REANUDAR
+// ==========================================
+
+function iniciarDespertar() {
+
+    log(
+        "Esperando 2 segundos..."
+    );
 
 
     setTimeout(function () {
 
-        const elementos =
-            document.querySelectorAll("*");
+        log(
+            "Buscando botón Pausar..."
+        );
 
 
-        let encontrados = 0;
+        const botonPausa =
+            buscarBoton(
+                "Pausar"
+            );
 
 
-        elementos.forEach(function (elemento) {
+        if (!botonPausa) {
 
-            const texto =
-                (elemento.innerText || "")
-                .trim();
+            log(
+                "❌ No encontré Pausar"
+            );
 
-
-            if (
-                texto === "Pausa" ||
-                texto === "Reanudar" ||
-                texto === "II Pausa" ||
-                texto.includes("Pausa")
-            ) {
-
-                encontrados++;
-
-                log(
-                    "ENCONTRADO: " +
-                    elemento.tagName +
-                    " / " +
-                    texto
-                );
-
-            }
-
-        });
+            return;
+        }
 
 
         log(
-            "Total encontrados: " +
-            encontrados
+            "✓ Encontré Pausar"
         );
+
+
+        // ==================================
+        // HACER CLICK
+        // ==================================
+
+        botonPausa.click();
+
+
+        log(
+            "✓ Pausar ejecutado"
+        );
+
+
+        // ==================================
+        // ESPERAR
+        // ==================================
+
+        setTimeout(function () {
+
+            log(
+                "Buscando Reanudar..."
+            );
+
+
+            const botonReanudar =
+                buscarBoton(
+                    "Reanudar"
+                );
+
+
+            if (
+                !botonReanudar
+            ) {
+
+                log(
+                    "❌ No encontré Reanudar"
+                );
+
+                return;
+            }
+
+
+            log(
+                "✓ Encontré Reanudar"
+            );
+
+
+            botonReanudar.click();
+
+
+            log(
+                "✓ REANUDAR EJECUTADO"
+            );
+
+
+            log(
+                "🎮 Ahora debería iniciar el juego"
+            );
+
+
+        }, 500);
 
 
     }, 2000);
